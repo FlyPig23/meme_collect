@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Tutorial</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tutorial.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Tutorial</h1>
+        <form id="memeForm" class="tutorial-form">
+            <div class="upload-container">
+                <div class="upload-row">
+                    <div class="upload-box tutorial-highlight" id="firstBox">
+                        <button type="button" class="delete-button" title="Delete image">×</button>
+                        <div class="upload-section">
+                            <div class="drop-zone">
+                                <img id="preview1" style="display: none;">
+                                <p>Drag & drop or click to upload<br>
+                                <small>Supported formats: PNG, GIF, JPEG, WebP, etc.</small></p>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill"></div>
+                            </div>
+                            <div class="upload-status"></div>
+                        </div>
+
+                        <hr class="section-divider">
+
+                        <div class="text-entries-section">
+                            <div class="textarea-group">
+                                <label for="culturalContext1"><strong>Cultural Context:</strong></label>
+                                <textarea name="culturalContext1" id="culturalContext1" rows="3" 
+                                    placeholder="Enter Cultural Context explanation here"></textarea>
+                            </div>
+                            
+                            <div class="textarea-group">
+                                <label for="potentialMisunderstandings1"><strong>Potential Misunderstandings:</strong></label>
+                                <textarea name="potentialMisunderstandings1" id="potentialMisunderstandings1" rows="3" 
+                                    placeholder="Enter Potential Misunderstandings here"></textarea>
+                            </div>
+                        </div>
+
+                        <hr class="section-divider">
+
+                        <div class="labels-container">
+                            <div class="sentiment-labels">
+                                <label>Sentiment Label:</label>
+                                <select name="sentimentLabel1" id="sentimentLabel1">
+                                    <option value="">Select sentiment</option>
+                                    <option value="positive">Positive</option>
+                                    <option value="negative">Negative</option>
+                                    <option value="neutral">Neutral</option>
+                                </select>
+                            </div>
+                            
+                            <div class="emotion-labels">
+                                <label>Emotion Labels:</label>
+                                <small class="label-hint">(You can select multiple)</small>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" name="emotionLabel1[]" value="sarcastic"> Sarcastic</label>
+                                    <label><input type="checkbox" name="emotionLabel1[]" value="humorous"> Humorous</label>
+                                    <label><input type="checkbox" name="emotionLabel1[]" value="motivation"> Motivation</label>
+                                    <label><input type="checkbox" name="emotionLabel1[]" value="offensive"> Offensive</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upload-box" id="dummyBox1"><div class="drop-zone"><p>Upload Box</p></div></div>
+                    <div class="upload-box" id="dummyBox2"><div class="drop-zone"><p>Upload Box</p></div></div>
+                    <div class="upload-box" id="dummyBox3"><div class="drop-zone"><p>Upload Box</p></div></div>
+                    <div class="upload-box" id="dummyBox4"><div class="drop-zone"><p>Upload Box</p></div></div>
+                </div>
+            </div>
+            <div class="button-container">
+                <button type="button" id="addMore">Upload More</button>
+                <button type="button" id="submitAll">Submit All</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tutorial overlay -->
+    <div class="tutorial-overlay" id="tutorialOverlay">
+        <div class="tutorial-box" id="tutorialBox">
+            <p id="tutorialText"></p>
+            <button id="nextStep">Next Step</button>
+        </div>
+    </div>
+
+    <script src="/js/tutorial.js"></script>
+</body>
+</html> 

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demographic Data</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Demographic Information</h1>
+        <form action="/demographics" method="POST">
+            <label for="age">Age Group:</label>
+            <select name="age" id="age" required>
+                <option value="">Select age group</option>
+                <option value="18-24">18-24</option>
+                <option value="25-34">25-34</option>
+                <option value="35-44">35-44</option>
+                <option value="45-54">45-54</option>
+                <option value="55-64">55-64</option>
+                <option value="65+">65 and above</option>
+            </select>
+
+            <label for="gender">Gender:</label>
+            <select name="gender" id="gender" required>
+                <option value="">Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+
+            <label for="education">Educational Background:</label>
+            <select name="education" id="education" required>
+                <option value="">Select education level</option>
+                <option value="High School">High School</option>
+                <option value="Some College">Some College</option>
+                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                <option value="Master's Degree">Master's Degree</option>
+                <option value="Doctoral Degree">Doctoral Degree</option>
+                <option value="Professional Degree">Professional Degree</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="nationality">Nationality:</label>
+            <select name="nationality" id="nationality" required>
+                <option value="">Select nationality</option>
+                <option value="China">China</option>
+                <option value="USA">USA</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="meme_familiarity">How familiar are you with memes from your culture?</label>
+            <select name="meme_familiarity" id="meme_familiarity" required>
+                <option value="">Select familiarity level</option>
+                <option value="Extremely Familiar">Extremely familiar - I understand and can explain most cultural memes</option>
+                <option value="Very Familiar">Very familiar - I understand most cultural memes</option>
+                <option value="Moderately Familiar">Moderately familiar - I understand some cultural memes</option>
+                <option value="Slightly Familiar">Slightly familiar - I understand few cultural memes</option>
+                <option value="Not at All Familiar">Not at all familiar - I don't understand cultural memes</option>
+            </select>
+
+            <label for="meme_usage">How often do you use memes in online conversations?</label>
+            <select name="meme_usage" id="meme_usage" required>
+                <option value="">Select frequency</option>
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Rarely">Rarely</option>
+                <option value="Never">Never</option>
+            </select>
+
+            <button type="submit">Next</button>
+        </form>
+    </div>
+</body>
+</html>
