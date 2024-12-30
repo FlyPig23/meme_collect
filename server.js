@@ -4,16 +4,20 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
 const session = require('express-session');
+require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Add session middleware
 app.use(session({
-    secret: 'your-secret-key',
+    secret: process.env.SESSION_SECRET || 'dreamlabmeme',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // set to true if using https
+    cookie: { 
+        secure: false, // set to true when you add HTTPS
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
 }));
 
 // Add user ID middleware
@@ -36,7 +40,7 @@ app.set('view engine', 'html');
 app.set('views', path.join(__dirname, 'views'));
 
 // Multer storage configuration
-const uploadDir = './uploads';
+const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
 }
@@ -68,7 +72,8 @@ const upload = multer({
 });
 
 // SQLite database setup
-const db = new sqlite3.Database('./database.db', async (err) => {
+const dbPath = path.join(__dirname, 'database.db');
+const db = new sqlite3.Database(dbPath, async (err) => {
     if (err) {
         console.error(err);
         return;
