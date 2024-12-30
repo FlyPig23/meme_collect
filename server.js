@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 });
 
 // Serve static files
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Parse form data
 app.use(express.urlencoded({ extended: true }));
