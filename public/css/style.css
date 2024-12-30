@@ -512,3 +512,10 @@ select:focus {
     margin-bottom: 5px;
     font-style: italic;
 }
+
+.highlight {
+    background-color: #fff3cd;
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: #856404;
+}
