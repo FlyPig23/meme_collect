@@ -4,19 +4,24 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
 const session = require('express-session');
+const SQLiteStore = require('connect-sqlite3')(session);
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Add session middleware
+// Update session middleware with SQLite store
 app.use(session({
+    store: new SQLiteStore({
+        db: 'sessions.db',
+        dir: './'
+    }),
     secret: process.env.SESSION_SECRET || 'dreamlabmeme',
     resave: false,
     saveUninitialized: true,
     cookie: { 
-        secure: false, // set to true when you add HTTPS
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        secure: false,
+        maxAge: 24 * 60 * 60 * 1000 
     }
 }));
 
@@ -208,4 +213,6 @@ app.post('/upload', upload.array('meme'), async (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+});
