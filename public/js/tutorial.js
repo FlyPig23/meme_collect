@@ -44,26 +44,25 @@ function updateTutorial() {
         const highlightedElement = document.querySelector(step.highlight);
         highlightedElement.classList.add('tutorial-highlight');
         
-        // Position the tutorial box next to the highlighted element
         const rect = highlightedElement.getBoundingClientRect();
         const boxRect = tutorialBox.getBoundingClientRect();
         
-        // Default position to the right of the element
-        let left = rect.right + 20;
-        let top = rect.top;
+        // Calculate viewport-relative positions
+        const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         
-        // If there's not enough space on the right, position to the left
-        if (left + boxRect.width > window.innerWidth) {
-            left = rect.left - boxRect.width - 20;
-        }
+        // Position to the right by default
+        let left = Math.min(rect.right + 20, viewportWidth - boxRect.width - 20);
+        let top = Math.min(rect.top, viewportHeight - boxRect.height - 20);
         
-        // If the box would go below the viewport, adjust upward
-        if (top + boxRect.height > window.innerHeight) {
-            top = window.innerHeight - boxRect.height - 20;
+        // If not enough space on right, position to left
+        if (rect.right + boxRect.width + 40 > viewportWidth) {
+            left = Math.max(20, rect.left - boxRect.width - 20);
         }
         
         tutorialBox.style.left = `${left}px`;
         tutorialBox.style.top = `${top}px`;
+        tutorialBox.style.transform = 'none';
     } else {
         // Center the box for the final step
         tutorialBox.style.left = '50%';
