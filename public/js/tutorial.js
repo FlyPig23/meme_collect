@@ -29,6 +29,7 @@ const tutorialSteps = [
 let currentStep = 0;
 
 function updateTutorial() {
+    updateOverlaySize();
     const step = tutorialSteps[currentStep];
     const tutorialText = document.getElementById('tutorialText');
     const nextButton = document.getElementById('nextStep');
@@ -45,34 +46,49 @@ function updateTutorial() {
         highlightedElement.classList.add('tutorial-highlight');
         
         const rect = highlightedElement.getBoundingClientRect();
-        const boxRect = tutorialBox.getBoundingClientRect();
+        const scrollY = window.scrollY;
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
         
-        // Calculate viewport-relative positions
-        const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        
-        // Position to the right by default
-        let left = Math.min(rect.right + 20, viewportWidth - boxRect.width - 20);
-        let top = rect.top;
-        
-        // Special adjustments for specific steps
-        if (step.highlight === '#firstBox .labels-container') {
-            top = rect.top - 100;  // Move up by 80px for labels step
-        } else if (step.highlight === '#addMore' || step.highlight === '#submitAll') {
-            left = rect.right + 20;  // Position to the right of the button
-            top = rect.top - 200;  // Move up significantly more
+        // Fixed width for tutorial box
+        const boxWidth = 280;
+        const tutorialBoxHeight = tutorialBox.offsetHeight;
+
+        // Calculate available spaces
+        const spaceRight = viewportWidth - rect.right - 20;
+        const spaceLeft = rect.left - 20;
+
+        // Default position (right side)
+        let left = rect.right + 20;
+        let top = rect.top + scrollY;
+
+        // Special positioning for both buttons (Upload More and Submit All)
+        if (step.highlight === '#submitAll' || step.highlight === '#addMore') {
+            // Position both boxes slightly above and to the right of their buttons
+            top = rect.top + scrollY - tutorialBoxHeight / 2;
+            left = rect.right + 20;
+            
+            // If not enough space on right, position above
+            if (spaceRight < boxWidth) {
+                top = rect.top + scrollY - tutorialBoxHeight - 8;
+                left = rect.left + (rect.width - boxWidth) / 2;
+            }
+
+            // Check if box would be partially hidden below viewport
+            const bottomOverflow = (rect.top + tutorialBoxHeight) - viewportHeight;
+            if (bottomOverflow > 0) {
+                top -= bottomOverflow;
+            }
         }
-        
-        // If not enough space on right, position to left
-        if (rect.right + boxRect.width + 40 > viewportWidth) {
-            left = Math.max(20, rect.left - boxRect.width - 20);
-        }
-        
+
+        // Apply final positions with absolute positioning
+        tutorialBox.style.position = 'absolute';
         tutorialBox.style.left = `${left}px`;
         tutorialBox.style.top = `${top}px`;
         tutorialBox.style.transform = 'none';
     } else {
         // Center the box for the final step
+        tutorialBox.style.position = 'fixed';
         tutorialBox.style.left = '50%';
         tutorialBox.style.top = '50%';
         tutorialBox.style.transform = 'translate(-50%, -50%)';
@@ -94,5 +110,34 @@ document.getElementById('nextStep').addEventListener('click', () => {
     updateTutorial();
 });
 
+// Add scroll event listener to update position when scrolling
+window.addEventListener('scroll', () => {
+    if (tutorialSteps[currentStep].highlight) {
+        updateTutorial();
+    }
+});
+
+// Add resize event listener to handle window resizing
+window.addEventListener('resize', () => {
+    updateOverlaySize();
+    if (tutorialSteps[currentStep].highlight) {
+        updateTutorial();
+    }
+});
+
+// Add new function to update overlay size
+function updateOverlaySize() {
+    const overlay = document.getElementById('tutorialOverlay');
+    const docHeight = Math.max(
+        document.body.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.clientHeight,
+        document.documentElement.scrollHeight,
+        document.documentElement.offsetHeight
+    );
+    overlay.style.height = `${docHeight}px`;
+}
+
 // Initialize tutorial
+updateTutorial(); 
 updateTutorial(); 
