@@ -204,20 +204,23 @@ button:hover {
 .thank-you-message {
     text-align: center;
     padding: 40px;
-    background: #ffffff;
+    background: white;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 600px;
 }
 
 .thank-you-message h1 {
-    color: #007bff;
+    color: #2c3e50;
     margin-bottom: 20px;
 }
 
 .thank-you-message p {
+    color: #34495e;
     font-size: 18px;
-    color: #666;
-    margin: 10px 0;
+    line-height: 1.6;
+    margin-bottom: 15px;
 }
 
 select {
@@ -518,4 +521,20 @@ select:focus {
     margin-top: 2px;
     margin-bottom: 5px;
     font-style: italic;
+}
+
+.prolific-button {
+    margin-top: 20px;
+    background-color: #6435c9;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: auto;
+    display: inline-block;
+}
+
+.prolific-button:hover {
+    background-color: #5829bb;
 }

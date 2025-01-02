@@ -26,12 +26,12 @@ app.use(session({
 }));
 
 // Add user ID middleware
-app.use((req, res, next) => {
-    if (!req.session.userId) {
-        req.session.userId = Date.now();  // Using timestamp as user ID for simplicity
-    }
-    next();
-});
+// app.use((req, res, next) => {
+//     if (!req.session.userId) {
+//         req.session.userId = Date.now();  // Using timestamp as user ID for simplicity
+//     }
+//     next();
+// });
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -53,10 +53,12 @@ if (!fs.existsSync(uploadDir)) {
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, uploadDir),
     filename: (req, file, cb) => {
-        // Create a unique filename while preserving original extension
-        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
+        // Get the current file index from multer's internal counter
+        const fileCount = req.files ? req.files.length : 0;
+        const prolificId = req.session.demographicData.prolific_id;
+        // Create filename in format: ProlificID_number.extension
         const ext = path.extname(file.originalname);
-        cb(null, `${uniqueSuffix}${ext}`);
+        cb(null, `${prolificId}_${fileCount + 1}${ext}`);
     }
 });
 
@@ -88,7 +90,7 @@ const db = new sqlite3.Database(dbPath, async (err) => {
     await new Promise((resolve, reject) => {
         db.run(`CREATE TABLE IF NOT EXISTS memes (
             id INTEGER PRIMARY KEY, 
-            user_id TEXT,
+            prolific_id TEXT,
             imagePath TEXT, 
             cultural_context TEXT,
             potential_misunderstandings TEXT,
@@ -141,8 +143,8 @@ app.post('/demographics', (req, res) => {
 });
 app.get('/upload', (req, res) => res.render('upload.html'));
 app.post('/upload', upload.array('meme'), async (req, res) => {
-    if (!req.session.userId) {
-        return res.status(400).send('Session expired. Please start over.');
+    if (!req.session?.demographicData?.prolific_id) {
+        return res.status(400).send('Session expired or missing Prolific ID. Please start over.');
     }
 
     const demographicData = req.session?.demographicData || {
@@ -180,12 +182,12 @@ app.post('/upload', upload.array('meme'), async (req, res) => {
             try {
                 await dbRun(
                     `INSERT INTO memes (
-                        user_id, imagePath, cultural_context, potential_misunderstandings,
+                        prolific_id, imagePath, cultural_context, potential_misunderstandings,
                         sentiment_label, emotion_labels, age, gender, education, 
                         nationality, meme_familiarity, meme_usage
                     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                     [
-                        req.session.userId,
+                        demographicData.prolific_id,
                         file.path,
                         culturalContext,
                         potentialMisunderstandings,

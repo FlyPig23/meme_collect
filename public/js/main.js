@@ -299,9 +299,16 @@ function submitForm(formData) {
             <div class="thank-you-message">
                 <h1>Thank You!</h1>
                 <p>Your contribution is greatly appreciated.</p>
-                <p>You may now close this window.</p>
+                <p>You will be automatically redirected to Prolific in 5 seconds...</p>
+                <button onclick="window.location.href='https://app.prolific.com/submissions/complete?cc=C1205BTX'" class="prolific-button">
+                    Return to Prolific Now
+                </button>
             </div>
         `;
+        // Auto redirect after 5 seconds
+        setTimeout(() => {
+            window.location.href = 'https://app.prolific.com/submissions/complete?cc=C1205BTX';
+        }, 5000);
     })
     .catch(error => {
         console.error('Error:', error);
