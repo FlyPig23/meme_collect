@@ -58,7 +58,7 @@ const storage = multer.diskStorage({
         const prolificId = req.session.demographicData.prolific_id;
         // Create filename in format: ProlificID_number.extension
         const ext = path.extname(file.originalname);
-        cb(null, `${prolificId}_${fileCount + 1}${ext}`);
+        cb(null, `${prolificId}_${fileCount}${ext}`);
     }
 });
 
