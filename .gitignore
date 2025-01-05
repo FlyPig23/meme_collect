@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Database files
+database.db
+sessions.db
+
+# Uploaded files
+uploads/*
+
+# OS files
+.DS_Store
+*.log
+
+# IDE files
+.vscode/
+.idea/
