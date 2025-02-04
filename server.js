@@ -584,8 +584,13 @@ loadMemeData();
 // Add this logging middleware for static files
 const uploadsPath = path.join(__dirname, 'us_meme_uploads');
 app.use('/us_meme_uploads', (req, res, next) => {
-    console.log('Attempting to load image:', req.url);
-    console.log('Full path:', path.join(uploadsPath, req.url));
+    const fullPath = path.join(uploadsPath, req.url);
+    console.log({
+        requestedFile: req.url,
+        fullPath,
+        exists: fs.existsSync(fullPath),
+        directory: fs.readdirSync(uploadsPath)
+    });
     next();
 }, express.static(uploadsPath));
 
