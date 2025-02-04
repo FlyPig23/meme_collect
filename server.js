@@ -585,12 +585,20 @@ loadMemeData();
 const uploadsPath = path.join(__dirname, 'us_meme_uploads');
 app.use('/us_meme_uploads', (req, res, next) => {
     const fullPath = path.join(uploadsPath, req.url);
+    const files = fs.readdirSync(uploadsPath);
     console.log({
         requestedFile: req.url,
         fullPath,
         exists: fs.existsSync(fullPath),
-        directory: fs.readdirSync(uploadsPath)
+        directory: files,
+        permissions: fs.statSync(uploadsPath).mode.toString(8),
+        fileList: files.join(', ')
     });
+    
+    // If file exists but still getting 404, try serving it directly
+    if (fs.existsSync(fullPath)) {
+        return res.sendFile(fullPath);
+    }
     next();
 }, express.static(uploadsPath));
 
