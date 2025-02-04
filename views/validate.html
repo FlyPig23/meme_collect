@@ -137,7 +137,7 @@
                 <h3>Cultural Context Explanation:</h3>
                 <p id="culturalContext" class="content-box"></p>
                 <div class="likert-scale">
-                    <p>This explanation is accurate</p>
+                    <p>This explanation is accurate:</p>
                     <div class="rating-options">
                         <label><input type="radio" name="explanation_rating" value="1">Strongly Disagree</label>
                         <label><input type="radio" name="explanation_rating" value="2">Disagree</label>
@@ -152,7 +152,7 @@
                 <h3>Potential Misunderstandings:</h3>
                 <p id="potentialMisunderstandings" class="content-box"></p>
                 <div class="likert-scale">
-                    <p>This potential misunderstanding is accurate</p>
+                    <p>This potential misunderstanding is accurate:</p>
                     <div class="rating-options">
                         <label><input type="radio" name="misunderstanding_rating" value="1">Strongly Disagree</label>
                         <label><input type="radio" name="misunderstanding_rating" value="2">Disagree</label>
@@ -164,11 +164,28 @@
             </div>
 
             <div class="validation-section">
+                <h3>US Cultural Significance:</h3>
+                <div class="likert-scale">
+                    <p>This meme has US cultural significance:</p>
+                    <div class="rating-options">
+                        <label><input type="radio" name="cultural_significance" value="1">Strongly Disagree</label>
+                        <label><input type="radio" name="cultural_significance" value="2">Disagree</label>
+                        <label><input type="radio" name="cultural_significance" value="3">Neutral</label>
+                        <label><input type="radio" name="cultural_significance" value="4">Agree</label>
+                        <label><input type="radio" name="cultural_significance" value="5">Strongly Agree</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="validation-section">
                 <h3>Sentiment Label:</h3>
-                <div class="radio-group">
-                    <label><input type="radio" name="sentiment_label" value="positive">Positive</label>
-                    <label><input type="radio" name="sentiment_label" value="neutral">Neutral</label>
-                    <label><input type="radio" name="sentiment_label" value="negative">Negative</label>
+                <p class="label-hint">(Please select the overall tone of this meme)</p>
+                <div class="likert-scale">
+                    <div class="rating-options">
+                        <label><input type="radio" name="sentiment_label" value="positive">Positive</label>
+                        <label><input type="radio" name="sentiment_label" value="neutral">Neutral</label>
+                        <label><input type="radio" name="sentiment_label" value="negative">Negative</label>
+                    </div>
                 </div>
             </div>
 

@@ -20,11 +20,15 @@ const TUTORIAL_STEPS = [
         text: "Rate how well this describes <span class='highlight'>potential misunderstandings</span>. Is it accurate and helpful?"
     },
     {
-        highlight: '.validation-section:nth-of-type(3)',
+        highlight: '.validation-section:nth-of-type(3) .likert-scale',
+        text: "Rate whether this meme has <span class='highlight'>US cultural significance</span>, i.e. is it a meme that is popular in the US or related to US culture?"
+    },
+    {
+        highlight: '.sentiment-section .likert-scale',
         text: "Choose <span class='highlight'>one sentiment</span> that best describes the meme's overall tone: <span class='highlight'>Positive</span>, <span class='highlight'>Neutral</span>, or <span class='highlight'>Negative</span>."
     },
     {
-        highlight: '.validation-section:nth-of-type(4)',
+        highlight: '.emotion-section',
         text: "Select <span class='highlight'>one or more emotions</span> that the meme expresses. Multiple selections are allowed."
     },
     {

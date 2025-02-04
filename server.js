@@ -476,6 +476,7 @@ validationDb.serialize(() => {
         meme_id TEXT,
         explanation_rating INTEGER,
         misunderstanding_rating INTEGER,
+        cultural_significance INTEGER,
         sentiment_label TEXT,
         emotion_labels TEXT,
         feedback TEXT,
@@ -496,6 +497,7 @@ app.post('/api/submitValidation', async (req, res) => {
         memeId, 
         explanationRating, 
         misunderstandingRating,
+        culturalSignificance,
         sentimentLabel,
         emotionLabels,
         feedback 
@@ -506,6 +508,7 @@ app.post('/api/submitValidation', async (req, res) => {
         memeId,
         explanationRating,
         misunderstandingRating,
+        culturalSignificance,
         sentimentLabel,
         emotionLabels,
         feedback
@@ -518,13 +521,14 @@ app.post('/api/submitValidation', async (req, res) => {
                 INSERT INTO meme_validations (
                     prolific_id, meme_id,
                     explanation_rating, misunderstanding_rating,
-                    sentiment_label, emotion_labels, feedback
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                    cultural_significance, sentiment_label, emotion_labels, feedback
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     prolificId,
                     memeId,
                     explanationRating,
                     misunderstandingRating,
+                    culturalSignificance,
                     sentimentLabel,
                     JSON.stringify(emotionLabels),
                     feedback || ''

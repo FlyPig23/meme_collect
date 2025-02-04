@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS meme_validations (
     meme_id TEXT,
     explanation_rating INTEGER,
     misunderstanding_rating INTEGER,
+    cultural_significance INTEGER,
     sentiment_label TEXT,
     emotion_labels TEXT,
     feedback TEXT,

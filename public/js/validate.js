@@ -61,12 +61,13 @@ async function submitValidation() {
 
     const explanationRating = document.querySelector('input[name="explanation_rating"]:checked')?.value;
     const misunderstandingRating = document.querySelector('input[name="misunderstanding_rating"]:checked')?.value;
+    const culturalSignificance = document.querySelector('input[name="cultural_significance"]:checked')?.value;
     const sentimentLabel = document.querySelector('input[name="sentiment_label"]:checked')?.value;
     const emotionLabels = Array.from(document.querySelectorAll('input[name="emotion_labels"]:checked'))
         .map(cb => cb.value);
     
-    if (!explanationRating || !misunderstandingRating || !sentimentLabel || emotionLabels.length === 0) {
-        alert('Please rate both explanations, select a sentiment label, and at least one emotion label.');
+    if (!explanationRating || !misunderstandingRating || !culturalSignificance || !sentimentLabel || emotionLabels.length === 0) {
+        alert('Please rate both explanations, indicate whether the meme has US cultural significance, select a sentiment label, and at least one emotion label.');
         return;
     }
 
@@ -74,6 +75,7 @@ async function submitValidation() {
         memeId: currentMeme.Image_ID,
         explanationRating: parseInt(explanationRating),
         misunderstandingRating: parseInt(misunderstandingRating),
+        culturalSignificance: parseInt(culturalSignificance),
         sentimentLabel,
         emotionLabels,
         feedback: document.getElementById('feedback').value || ''
