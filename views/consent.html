@@ -7,31 +7,45 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <div class="language-toggle">
+        <button onclick="languageToggle.toggle()" id="langToggle">中文</button>
+    </div>
+
     <div class="consent-container">
         <div class="consent-form">
-            <h1>Research Study Consent Form</h1>
+            <h1 data-translate="consent_title">Research Study Consent Form</h1>
             <div class="consent-content">
-                <p>We invite you to participate in a research study being conducted by investigators from Texas A&M University. 
+                <p data-translate="consent_intro">We invite you to participate in a research study being conducted by investigators from Texas A&M University. 
                     You are being asked to participate in this research study because you
                     can contribute to our understanding of cross-cultural meme interpretation.</p>
                 
-                <h2>Purpose of the Study</h2>
-                <p>The aim of this research is to explore how memes are interpreted differently across cultures
+                <h2 data-translate="purpose_title">Purpose of the Study</h2>
+                <p data-translate="purpose_text">The aim of this research is to explore how memes are interpreted differently across cultures
                     and to build a dataset that can help understand cultural misunderstandings in online communication.</p>
                 
-                <h2>Study Procedures</h2>
-                <p>If you agree to participate, you will:</p>
-                <ul>
-                    <li>Complete a brief demographic survey</li>
-                    <li>Upload at least 10 memes that you are familiar with and have cultural significance</li>
-                    <li>Provide detailed "Cultural Context" explanations for each meme, and "Potential Misunderstandings" (<span class="highlight">you can use either Chinese or English based on your preference</span>)</li>
-                    <li>Label each meme with:
-                        <ul>
-                            <li>A sentiment label (choose one: positive, negative, or neutral)</li>
-                            <li>Emotion labels (can select multiple: sarcastic, humorous, motivation, offensive)</li>
-                        </ul>
-                    </li>
-                </ul>
+                <h2 data-translate="procedures_title">Study Procedures</h2>
+                <p data-translate="procedures_intro">If you agree to participate, you will:</p>
+                <div id="stage1-content" style="display: none;">
+                    <ul>
+                        <li data-translate="stage1_bullet1">Complete a brief demographic survey</li>
+                        <li data-translate="stage1_bullet2">Upload at least 10 memes that you are familiar with and have cultural significance</li>
+                        <li data-translate="stage1_bullet3">Provide detailed "Cultural Context" explanations for each meme, and "Potential Misunderstandings" (you can use either Chinese or English based on your preference)</li>
+                        <li data-translate="stage1_bullet4">Label each meme with:
+                            <ul>
+                                <li data-translate="stage1_subbullet1">A sentiment label (choose one: positive, negative, or neutral)</li>
+                                <li data-translate="stage1_subbullet2">Emotion labels (can select multiple: sarcastic, humorous, motivation, offensive)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div id="stage2-content" style="display: none;">
+                    <ul>
+                        <li>Complete a brief demographic survey</li>
+                        <li>Review and validate 20 meme interpretations from different cultural perspectives</li>
+                        <li>Rate the accuracy of cultural context explanations and potential misunderstandings</li>
+                        <li>Provide feedback on the interpretations to help improve cross-cultural understanding if you have any thoughts</li>
+                    </ul>
+                </div>
                 
                 <h2>Data Usage</h2>
                 <p>We would like to use the data we obtain in this study for current research as well as future studies.
@@ -49,13 +63,41 @@
                 <h2>Contact Information</h2>
                 <p>If you have any questions about the research study, please contact Professor Meng Xia 
                     (mengxia@tamu.edu) or Hangxiao Zhu (hangxiao@tamu.edu).</p>
-            </div>
-            
-            <div class="consent-footer">
-                <p class="consent-note">If you do not wish to participate, you may simply close this browser tab.</p>
-                <button onclick="window.location.href='/instructions'" class="accept-button">I Agree to Participate</button>
+
+                <div class="consent-buttons">
+                    <button onclick="window.location.href='/demographics'" class="primary-button">I Agree</button>
+                    <button onclick="window.close()" class="secondary-button">I Decline</button>
+                </div>
             </div>
         </div>
     </div>
+    
+    <script src="/js/config.js"></script>
+    <script src="/js/utils/translator.js"></script>
+    <script src="/js/components/languageToggle.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!localStorage.getItem('language')) {
+                localStorage.setItem('language', 'en');
+            }
+            window.languageToggle = new LanguageToggle();
+            await window.languageToggle.translator.loadTranslations();
+            await window.languageToggle.translator.updatePageContent();
+        });
+
+        // Show content based on experiment stage
+        window.onload = function() {
+            const stage1Content = document.getElementById('stage1-content');
+            const stage2Content = document.getElementById('stage2-content');
+            
+            if (EXPERIMENT_CONFIG.STAGE === 1) {
+                stage1Content.style.display = 'block';
+                stage2Content.style.display = 'none';
+            } else {
+                stage1Content.style.display = 'none';
+                stage2Content.style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html> 

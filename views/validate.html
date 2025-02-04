@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Meme Validation</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tutorial.css">
+    <style>
+        .validation-section {
+            background: #f9f9f9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 1.1em;
+        }
+
+        .validation-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            font-size: 1.3em;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 120px;
+        }
+
+        .content-box {
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+
+        .feedback-section textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
+
+        .continue-button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        .continue-button:hover {
+            background-color: #0056b3;
+        }
+
+        .likert-scale p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .rating-options {
+            font-size: 1.1em;
+        }
+
+        .label-hint {
+            color: #666;
+            font-size: 1em;
+            margin: 5px 0 10px 0;
+            font-style: italic;
+        }
+
+        .progress-counter {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #f8f9fa;
+            padding: 8px 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>    
+    <div class="language-toggle">
+        <button onclick="languageToggle.toggle()" id="langToggle">中文</button>
+    </div>
+
+    <div class="progress-counter">
+        <span id="progressCount">0/20</span>
+    </div>
+    
+    <div class="container">
+        <h1 data-translate="validate_title">Validate Meme Interpretations</h1>
+        
+        <div class="validation-box">
+            <img id="memeImage" src="" alt="Meme to validate" class="meme-image">
+            
+            <div class="validation-section">
+                <h3>Cultural Context Explanation:</h3>
+                <p id="culturalContext" class="content-box"></p>
+                <div class="likert-scale">
+                    <p>This explanation is accurate</p>
+                    <div class="rating-options">
+                        <label><input type="radio" name="explanation_rating" value="1">Strongly Disagree</label>
+                        <label><input type="radio" name="explanation_rating" value="2">Disagree</label>
+                        <label><input type="radio" name="explanation_rating" value="3">Neutral</label>
+                        <label><input type="radio" name="explanation_rating" value="4">Agree</label>
+                        <label><input type="radio" name="explanation_rating" value="5">Strongly Agree</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="validation-section">
+                <h3>Potential Misunderstandings:</h3>
+                <p id="potentialMisunderstandings" class="content-box"></p>
+                <div class="likert-scale">
+                    <p>This potential misunderstanding is accurate</p>
+                    <div class="rating-options">
+                        <label><input type="radio" name="misunderstanding_rating" value="1">Strongly Disagree</label>
+                        <label><input type="radio" name="misunderstanding_rating" value="2">Disagree</label>
+                        <label><input type="radio" name="misunderstanding_rating" value="3">Neutral</label>
+                        <label><input type="radio" name="misunderstanding_rating" value="4">Agree</label>
+                        <label><input type="radio" name="misunderstanding_rating" value="5">Strongly Agree</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="validation-section">
+                <h3>Sentiment Label:</h3>
+                <div class="radio-group">
+                    <label><input type="radio" name="sentiment_label" value="positive">Positive</label>
+                    <label><input type="radio" name="sentiment_label" value="neutral">Neutral</label>
+                    <label><input type="radio" name="sentiment_label" value="negative">Negative</label>
+                </div>
+            </div>
+
+            <div class="validation-section">
+                <h3>Emotion Labels:</h3>
+                <p class="label-hint">(Please select one or more emotion labels that best describe this meme)</p>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="emotion_labels" value="sarcastic">Sarcastic</label>
+                    <label><input type="checkbox" name="emotion_labels" value="humorous">Humorous</label>
+                    <label><input type="checkbox" name="emotion_labels" value="motivation">Motivation</label>
+                    <label><input type="checkbox" name="emotion_labels" value="offensive">Offensive</label>
+                </div>
+            </div>
+            
+            <div class="validation-section feedback-section">
+                <h3>Additional Comments (Optional):</h3>
+                <textarea id="feedback" placeholder="Any additional thoughts..."></textarea>
+            </div>
+            
+            <button onclick="submitValidation()" class="continue-button">Submit & Continue</button>
+            
+            <div id="progress" class="progress-text"></div>
+        </div>
+    </div>
+
+    <script src="/js/validate.js"></script>
+    <script src="/js/tutorial.js"></script>
+</body>
+</html> 

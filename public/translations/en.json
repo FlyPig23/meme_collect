@@ -1,0 +1,28 @@
+{
+  "welcome_title": "Welcome to the Meme Upload Platform",
+  "how_to_contribute": "How to Contribute",
+  "step_1": "Read the examples and disclaimer below carefully",
+  "step_2": "Provide your demographic information",
+  "step_3": "Upload at least 10 memes that you are familiar with and have cultural significance",
+  
+  "cultural_context_title": "Why Cultural Context Matters: Examples",
+  "example_1_title": "Example 1: \"Netflix and Chill\" (US Culture)",
+  "example_1_context": "Cultural Context: In US culture, \"Netflix and Chill\" is a euphemism for romantic or sexual activity, not literally watching Netflix.",
+  "example_1_misunderstanding": "Potential Misunderstanding: People from other cultures might take it literally as an invitation to watch movies, leading to awkward situations. For example, international students might innocently use this phrase to invite friends to watch movies, unaware of its cultural implications in the US.",
+  
+  "example_2_title": "Example 2: \"Wearing a Green Hat\" (Chinese Culture)",
+  "example_2_context": "Cultural Context: In Chinese culture, wearing a green hat symbolizes that one's spouse has been unfaithful.",
+  "example_2_misunderstanding": "Potential Misunderstanding: People from other cultures might innocently share images of green hats or gift them to Chinese friends, unaware that this could be seen as highly offensive or suggestive of relationship issues.",
+  
+  "important_note": "Important Note",
+  "important_note_text": "These examples show why we need your help in explaining the cultural context of memes. When uploading memes, please:",
+  "note_point_1": "Provide detailed cultural context in descriptions",
+  "note_point_2": "Explain potential cultural misunderstandings",
+  "note_point_3": "Note specific cultural references that might not be obvious to others",
+  
+  "bonus_opportunity": "Bonus Opportunity! 🎉",
+  "bonus_text": "We will conduct follow-up research based on all memes collected in this experiment. If your meme submissions are deemed high quality, you'll receive a bonus! So please take this research seriously.",
+  
+  "disclaimer": "Disclaimer: All uploads will be used for research purposes only.",
+  "continue": "Continue"
+} 

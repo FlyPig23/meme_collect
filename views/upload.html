@@ -7,18 +7,33 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <div class="language-toggle">
+        <button onclick="languageToggle.toggle()" id="langToggle">中文</button>
+    </div>
+
     <div class="container">
-        <h1>Upload Memes</h1>
+        <h1 data-translate="upload_title">Upload Memes</h1>
         <form id="memeForm" action="/upload" method="POST" enctype="multipart/form-data">
             <div class="upload-container">
                 <!-- Upload boxes will be dynamically added here -->
             </div>
             <div class="button-container">
-                <button type="button" id="addMore">Upload More</button>
-                <button type="submit">Submit All</button>
+                <button type="button" id="addMore" data-translate="upload_more">Upload More</button>
+                <button type="submit" data-translate="submit_all">Submit All</button>
             </div>
         </form>
     </div>
+
+    <script src="/js/config.js"></script>
+    <script src="/js/utils/translator.js"></script>
+    <script src="/js/components/languageToggle.js"></script>
     <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            window.languageToggle = new LanguageToggle();
+            await window.languageToggle.translator.loadTranslations();
+            await window.languageToggle.translator.updatePageContent();
+        });
+    </script>
 </body>
 </html>
