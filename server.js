@@ -582,11 +582,12 @@ app.post('/api/submitValidation', async (req, res) => {
 loadMemeData();
 
 // Add this logging middleware for static files
+const uploadsPath = path.join(__dirname, 'us_meme_uploads');
 app.use('/us_meme_uploads', (req, res, next) => {
     console.log('Attempting to load image:', req.url);
-    console.log('Full path:', path.join(__dirname, 'us_meme_uploads', req.url));
+    console.log('Full path:', path.join(uploadsPath, req.url));
     next();
-}, express.static('us_meme_uploads'));
+}, express.static(uploadsPath));
 
 // Add this to check if the directory exists when server starts
 const uploadsDir = path.join(__dirname, 'us_meme_uploads');
