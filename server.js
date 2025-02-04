@@ -581,26 +581,24 @@ app.post('/api/submitValidation', async (req, res) => {
 // Load initial data
 loadMemeData();
 
-// Add this logging middleware for static files
-const uploadsPath = path.join(__dirname, 'us_meme_uploads');
+// Add this near the top of your server.js, after other imports
+const memeUploadsPath = path.join(__dirname, 'us_meme_uploads');
+
+// Replace your existing static file serving middleware with this
 app.use('/us_meme_uploads', (req, res, next) => {
-    const fullPath = path.join(uploadsPath, req.url);
-    const files = fs.readdirSync(uploadsPath);
+    const fullPath = path.join(memeUploadsPath, req.url);
     console.log({
         requestedFile: req.url,
         fullPath,
         exists: fs.existsSync(fullPath),
-        directory: files,
-        permissions: fs.statSync(uploadsPath).mode.toString(8),
-        fileList: files.join(', ')
+        directory: fs.readdirSync(memeUploadsPath)
     });
     
-    // If file exists but still getting 404, try serving it directly
     if (fs.existsSync(fullPath)) {
         return res.sendFile(fullPath);
     }
     next();
-}, express.static(uploadsPath));
+}, express.static(memeUploadsPath));
 
 // Add this to check if the directory exists when server starts
 const uploadsDir = path.join(__dirname, 'us_meme_uploads');
