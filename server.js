@@ -394,26 +394,38 @@ function imageExists(imagePath) {
     }
 }
 
-// Function to get a random meme with retry logic
+// Function to get a random meme with prioritization
 function getRandomMeme(maxRetries = 5) {
     let attempts = 0;
     
     while (attempts < maxRetries) {
-        // Filter memes with count < 3
-        const availableMemes = memeData.filter(meme => parseInt(meme.Count || 0) < 3);
+        // Filter memes with count < 4
+        const availableMemes = memeData.filter(meme => parseInt(meme.Count || 0) < 4);
         
         if (availableMemes.length === 0) {
             console.log('No more available memes');
             return null;
         }
         
-        // Randomly select a meme
-        const selectedMeme = availableMemes[Math.floor(Math.random() * availableMemes.length)];
+        // Group memes by their count
+        const groupedMemes = availableMemes.reduce((acc, meme) => {
+            const count = parseInt(meme.Count || 0);
+            if (!acc[count]) acc[count] = [];
+            acc[count].push(meme);
+            return acc;
+        }, {});
+        
+        // Get memes with lowest count
+        const minCount = Math.min(...Object.keys(groupedMemes).map(Number));
+        const priorityMemes = groupedMemes[minCount];
+        
+        // Randomly select from the priority group
+        const selectedMeme = priorityMemes[Math.floor(Math.random() * priorityMemes.length)];
         const imagePath = path.join(__dirname, 'us_meme_uploads', selectedMeme.Image_ID);
         
         // Check if image exists
         if (imageExists(imagePath)) {
-            console.log(`Found valid meme after ${attempts + 1} attempts`);
+            console.log(`Found valid meme after ${attempts + 1} attempts (count: ${minCount})`);
             return selectedMeme;
         }
         
