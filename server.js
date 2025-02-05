@@ -585,17 +585,30 @@ const memeUploadsPath = path.join(__dirname, 'us_meme_uploads');
 console.log('Serving files from:', memeUploadsPath);
 
 app.use('/us_meme_uploads', (req, res, next) => {
-    const fullPath = path.join(memeUploadsPath, req.url);
-    console.log({
-        requestedFile: req.url,
-        fullPath,
-        exists: fs.existsSync(fullPath),
-        files: fs.readdirSync(memeUploadsPath).slice(0, 5)
-    });
-
-    if (fs.existsSync(fullPath)) {
-        return res.sendFile(fullPath);
+    // Remove any query parameters and decode the URL
+    const cleanUrl = decodeURIComponent(req.url.split('?')[0]);
+    const fullPath = path.join(memeUploadsPath, cleanUrl);
+    
+    // Don't try to serve directory indexes
+    if (req.url === '/' || req.url === '') {
+        return res.status(404).send('Not found');
     }
+
+    // Check for file existence with case-insensitive extension
+    const dir = path.dirname(fullPath);
+    const baseFileName = path.basename(fullPath, path.extname(fullPath));
+    const files = fs.readdirSync(dir);
+    
+    const matchingFile = files.find(file => 
+        file.toLowerCase().startsWith(baseFileName.toLowerCase()) && 
+        path.extname(file).toLowerCase() === path.extname(cleanUrl).toLowerCase()
+    );
+
+    if (matchingFile) {
+        const correctPath = path.join(dir, matchingFile);
+        return res.sendFile(correctPath);
+    }
+
     next();
 }, express.static(memeUploadsPath));
 
