@@ -587,15 +587,18 @@ const memeUploadsPath = path.join(__dirname, 'us_meme_uploads');
 // Replace your existing static file serving middleware with this
 app.use('/us_meme_uploads', (req, res, next) => {
     const fullPath = path.join(memeUploadsPath, req.url);
-    console.log({
+    const stats = {
         requestedFile: req.url,
         fullPath,
         exists: fs.existsSync(fullPath),
-        directory: fs.readdirSync(memeUploadsPath)
-    });
+        permissions: fs.statSync(memeUploadsPath).mode.toString(8),
+        files: fs.readdirSync(memeUploadsPath).slice(0, 5) // Show first 5 files
+    };
+    console.log('Image request details:', stats);
     
     if (fs.existsSync(fullPath)) {
-        return res.sendFile(fullPath);
+        res.setHeader('Content-Type', 'image/jpeg');
+        return res.sendFile(fullPath, { root: '/' });
     }
     next();
 }, express.static(memeUploadsPath));
