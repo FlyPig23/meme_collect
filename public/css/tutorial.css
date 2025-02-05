@@ -30,15 +30,22 @@
 }
 
 .tutorial-box {
-    position: absolute;
+    position: fixed;
     background: white;
     padding: 20px;
     border-radius: 8px;
     width: 280px;
+    max-width: 90vw;
     text-align: left;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     pointer-events: auto;
     z-index: 1001;
+    overflow-y: auto;
+    
+    /* Initial position */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .tutorial-box::-webkit-scrollbar {
@@ -85,4 +92,39 @@
 
 #firstBox {
     pointer-events: auto;
-} 
+}
+
+/* Add media queries for smaller screens */
+@media screen and (max-width: 768px) {
+    .tutorial-box {
+        width: 90vw;
+        max-height: 70vh;
+        padding: 15px;
+    }
+}
+
+/* Add positioning classes */
+.tutorial-box.top {
+    top: 10vh;
+    transform: translate(-50%, 0);
+}
+
+.tutorial-box.bottom {
+    bottom: 10vh;
+    top: auto;
+    transform: translate(-50%, 0);
+}
+
+.tutorial-box.center {
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Ensure the box stays within viewport bounds */
+.tutorial-box.adjust-position {
+    max-height: calc(100vh - 40px);
+    top: 20px;
+    transform: translateX(-50%);
+}
+
+/* Add JavaScript to dynamically position and resize the box */ 

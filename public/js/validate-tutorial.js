@@ -58,7 +58,7 @@ function updateTutorial() {
     tutorialText.innerHTML = step.text;
     nextButton.textContent = step.finalStep ? 'Start Validating' : 'Next';
     
-    // Handle highlighting
+    // Remove previous highlights
     document.querySelectorAll('.tutorial-highlight').forEach(el => {
         el.classList.remove('tutorial-highlight');
     });
@@ -68,45 +68,117 @@ function updateTutorial() {
         if (element) {
             element.classList.add('tutorial-highlight');
             
+            // Get positions and dimensions (using viewport-relative positioning)
             const rect = element.getBoundingClientRect();
-            const scrollY = window.scrollY;
             const viewportWidth = window.innerWidth;
             const viewportHeight = window.innerHeight;
-            
-            const boxWidth = 280;
-            const tutorialBoxHeight = tutorialBox.offsetHeight;
-            
+            let boxWidth = tutorialBox.offsetWidth;
+            let boxHeight = tutorialBox.offsetHeight;
+
+            // Reset box size to default first
+            tutorialBox.style.width = '280px';
+            tutorialBox.style.maxHeight = '80vh';
+
+            // Recalculate box dimensions after reset
+            boxWidth = tutorialBox.offsetWidth;
+            boxHeight = tutorialBox.offsetHeight;
+
+            // Calculate available space in each direction
             const spaceRight = viewportWidth - rect.right - 20;
+            const spaceLeft = rect.left - 20;
+            const spaceTop = rect.top - 20;
+            const spaceBottom = viewportHeight - rect.bottom - 20;
+
+            // Check if viewport is too narrow
+            const isViewportNarrow = viewportWidth < 600;
             
-            // Special positioning for continue button
-            if (step.highlight === '.continue-button') {
-                let left = rect.right + 20;
-                let top = rect.top + scrollY - tutorialBoxHeight - 20; // Position above the button
-                
-                if (spaceRight < boxWidth) {
-                    left = rect.left - boxWidth - 20;
-                    top = rect.top + scrollY - tutorialBoxHeight - 20;
+            let position = {};
+
+            if (isViewportNarrow) {
+                // For narrow viewports, center horizontally and position near the element
+                const narrowWidth = Math.min(viewportWidth * 0.9, 280);
+                tutorialBox.style.width = `${narrowWidth}px`;
+                boxWidth = narrowWidth;
+
+                position = {
+                    left: '50%',
+                    transform: 'translateX(-50%)'
+                };
+
+                if (spaceBottom > boxHeight) {
+                    position.top = rect.bottom + 10;
+                } else if (spaceTop > boxHeight) {
+                    position.top = rect.top - boxHeight - 10;
+                } else {
+                    position.top = '50%';
+                    position.transform = 'translate(-50%, -50%)';
                 }
-                
-                tutorialBox.style.position = 'absolute';
-                tutorialBox.style.left = `${left}px`;
-                tutorialBox.style.top = `${top}px`;
-                tutorialBox.style.transform = 'none';
             } else {
-                // Default positioning for other elements (existing code)
-                let left = rect.right + 20;
-                let top = rect.top + scrollY;
-                
-                if (spaceRight < boxWidth) {
-                    left = rect.left - boxWidth - 20;
+                // For wider viewports, try to keep the box close to the element
+                if (spaceRight > boxWidth) {
+                    // Position to the right, vertically aligned with element center
+                    position = {
+                        left: rect.right + 20,
+                        top: rect.top + (rect.height - boxHeight) / 2,
+                        transform: 'none'
+                    };
+
+                    // Ensure box stays within vertical viewport bounds
+                    if (position.top < 10) {
+                        position.top = 10;
+                    } else if (position.top + boxHeight > viewportHeight - 10) {
+                        position.top = viewportHeight - boxHeight - 10;
+                    }
+                } else if (spaceLeft > boxWidth) {
+                    // Position to the left, vertically aligned with element center
+                    position = {
+                        left: rect.left - boxWidth - 20,
+                        top: rect.top + (rect.height - boxHeight) / 2,
+                        transform: 'none'
+                    };
+
+                    // Ensure box stays within vertical viewport bounds
+                    if (position.top < 10) {
+                        position.top = 10;
+                    } else if (position.top + boxHeight > viewportHeight - 10) {
+                        position.top = viewportHeight - boxHeight - 10;
+                    }
+                } else {
+                    // If horizontal space is limited, position above or below
+                    position = {
+                        left: rect.left + (rect.width - boxWidth) / 2,
+                        transform: 'none'
+                    };
+
+                    // Ensure horizontal position is within bounds
+                    if (position.left < 20) {
+                        position.left = 20;
+                    } else if (position.left + boxWidth > viewportWidth - 20) {
+                        position.left = viewportWidth - boxWidth - 20;
+                    }
+
+                    if (spaceBottom > boxHeight) {
+                        position.top = rect.bottom + 10;
+                    } else if (spaceTop > boxHeight) {
+                        position.top = rect.top - boxHeight - 10;
+                    } else {
+                        // If no space above or below, center in viewport
+                        position = {
+                            left: '50%',
+                            top: '50%',
+                            transform: 'translate(-50%, -50%)'
+                        };
+                        tutorialBox.style.width = `${Math.min(viewportWidth * 0.9, 280)}px`;
+                    }
                 }
-                
-                tutorialBox.style.position = 'absolute';
-                tutorialBox.style.left = `${left}px`;
-                tutorialBox.style.top = `${top}px`;
-                tutorialBox.style.transform = 'none';
             }
-            
+
+            // Apply the calculated position
+            tutorialBox.style.position = 'fixed';
+            tutorialBox.style.left = typeof position.left === 'number' ? `${position.left}px` : position.left;
+            tutorialBox.style.top = typeof position.top === 'number' ? `${position.top}px` : position.top;
+            tutorialBox.style.transform = position.transform;
+
             // Ensure the highlighted element is in view
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
@@ -116,6 +188,8 @@ function updateTutorial() {
         tutorialBox.style.left = '50%';
         tutorialBox.style.top = '50%';
         tutorialBox.style.transform = 'translate(-50%, -50%)';
+        tutorialBox.style.width = '280px';
+        tutorialBox.style.maxHeight = '80vh';
     }
 }
 
