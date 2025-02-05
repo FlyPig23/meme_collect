@@ -581,24 +581,20 @@ app.post('/api/submitValidation', async (req, res) => {
 // Load initial data
 loadMemeData();
 
-// Add this near the top of your server.js, after other imports
 const memeUploadsPath = path.join(__dirname, 'us_meme_uploads');
+console.log('Serving files from:', memeUploadsPath);
 
-// Replace your existing static file serving middleware with this
 app.use('/us_meme_uploads', (req, res, next) => {
     const fullPath = path.join(memeUploadsPath, req.url);
-    const stats = {
+    console.log({
         requestedFile: req.url,
         fullPath,
         exists: fs.existsSync(fullPath),
-        permissions: fs.statSync(memeUploadsPath).mode.toString(8),
-        files: fs.readdirSync(memeUploadsPath).slice(0, 5) // Show first 5 files
-    };
-    console.log('Image request details:', stats);
-    
+        files: fs.readdirSync(memeUploadsPath).slice(0, 5)
+    });
+
     if (fs.existsSync(fullPath)) {
-        res.setHeader('Content-Type', 'image/jpeg');
-        return res.sendFile(fullPath, { root: '/' });
+        return res.sendFile(fullPath);
     }
     next();
 }, express.static(memeUploadsPath));
