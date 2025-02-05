@@ -581,37 +581,21 @@ app.post('/api/submitValidation', async (req, res) => {
 // Load initial data
 loadMemeData();
 
-const memeUploadsPath = path.join(__dirname, 'us_meme_uploads');
+const memeUploadsPath = path.join(__dirname, 'public', 'images');
 console.log('Serving files from:', memeUploadsPath);
 
-app.use('/us_meme_uploads', (req, res, next) => {
+app.use('/images', (req, res, next) => {
     const cleanUrl = decodeURIComponent(req.url.split('?')[0]);
     const fullPath = path.join(memeUploadsPath, cleanUrl);
     
-    // Add detailed debugging
     console.log('Image Request Debug:', {
         requestUrl: req.url,
         cleanUrl,
         fullPath,
         fileExists: fs.existsSync(fullPath),
         directory: memeUploadsPath,
-        requestedFile: path.basename(cleanUrl),
-        availableFiles: fs.readdirSync(memeUploadsPath)
-            .filter(f => f.toLowerCase().includes(path.basename(cleanUrl).toLowerCase()))
+        requestedFile: path.basename(cleanUrl)
     });
-
-    // Handle case-insensitive file matching
-    if (!fs.existsSync(fullPath)) {
-        const fileName = path.basename(cleanUrl);
-        const files = fs.readdirSync(memeUploadsPath);
-        const matchingFile = files.find(f => f.toLowerCase() === fileName.toLowerCase());
-        
-        if (matchingFile) {
-            const correctPath = path.join(memeUploadsPath, matchingFile);
-            console.log('Found case-insensitive match:', correctPath);
-            return res.sendFile(correctPath);
-        }
-    }
 
     if (fs.existsSync(fullPath)) {
         console.log('Serving file:', fullPath);
@@ -620,7 +604,7 @@ app.use('/us_meme_uploads', (req, res, next) => {
 
     console.log('File not found:', fullPath);
     next();
-}, express.static(memeUploadsPath));
+});
 
 // Add this to check if the directory exists when server starts
 const uploadsDir = path.join(__dirname, 'us_meme_uploads');

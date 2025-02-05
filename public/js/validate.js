@@ -19,7 +19,7 @@ async function loadNextMeme() {
         }
         
         // Load meme image and text content
-        document.getElementById('memeImage').src = `/us_meme_uploads/${currentMeme.Image_ID}`;
+        document.getElementById('memeImage').src = `/images/${currentMeme.Image_ID}`;
         document.getElementById('culturalContext').textContent = currentMeme.Rewritten_Explanation;
         document.getElementById('potentialMisunderstandings').textContent = currentMeme.Rewritten_Misunderstanding;
         
