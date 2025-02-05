@@ -585,30 +585,40 @@ const memeUploadsPath = path.join(__dirname, 'us_meme_uploads');
 console.log('Serving files from:', memeUploadsPath);
 
 app.use('/us_meme_uploads', (req, res, next) => {
-    // Remove any query parameters and decode the URL
     const cleanUrl = decodeURIComponent(req.url.split('?')[0]);
     const fullPath = path.join(memeUploadsPath, cleanUrl);
     
-    // Don't try to serve directory indexes
-    if (req.url === '/' || req.url === '') {
-        return res.status(404).send('Not found');
+    // Add detailed debugging
+    console.log('Image Request Debug:', {
+        requestUrl: req.url,
+        cleanUrl,
+        fullPath,
+        fileExists: fs.existsSync(fullPath),
+        directory: memeUploadsPath,
+        requestedFile: path.basename(cleanUrl),
+        availableFiles: fs.readdirSync(memeUploadsPath)
+            .filter(f => f.toLowerCase().includes(path.basename(cleanUrl).toLowerCase()))
+    });
+
+    // Handle case-insensitive file matching
+    if (!fs.existsSync(fullPath)) {
+        const fileName = path.basename(cleanUrl);
+        const files = fs.readdirSync(memeUploadsPath);
+        const matchingFile = files.find(f => f.toLowerCase() === fileName.toLowerCase());
+        
+        if (matchingFile) {
+            const correctPath = path.join(memeUploadsPath, matchingFile);
+            console.log('Found case-insensitive match:', correctPath);
+            return res.sendFile(correctPath);
+        }
     }
 
-    // Check for file existence with case-insensitive extension
-    const dir = path.dirname(fullPath);
-    const baseFileName = path.basename(fullPath, path.extname(fullPath));
-    const files = fs.readdirSync(dir);
-    
-    const matchingFile = files.find(file => 
-        file.toLowerCase().startsWith(baseFileName.toLowerCase()) && 
-        path.extname(file).toLowerCase() === path.extname(cleanUrl).toLowerCase()
-    );
-
-    if (matchingFile) {
-        const correctPath = path.join(dir, matchingFile);
-        return res.sendFile(correctPath);
+    if (fs.existsSync(fullPath)) {
+        console.log('Serving file:', fullPath);
+        return res.sendFile(fullPath);
     }
 
+    console.log('File not found:', fullPath);
     next();
 }, express.static(memeUploadsPath));
 
