@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cross-Cultural Validation Tutorial</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tutorial.css">
+</head>
+<body>
+    <div id="tutorialOverlay" class="tutorial-overlay">
+        <div id="tutorialBox" class="tutorial-box">
+            <p id="tutorialText"></p>
+            <button id="nextStep" class="tutorial-button">Next</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Cross-Cultural Validation Tutorial</h1>
+        
+        <div class="validation-box">
+            <img id="memeImage" src="/images/netflixchill.jpg" alt="Sample meme" class="meme-image">
+            
+            <div class="validation-section">
+                <h3>What does this meme mean?</h3>
+                <p class="instruction-text">Please select the correct interpretation of this meme:</p>
+                <div class="multiple-choice">
+                    <div class="choice-options">
+                        <label>
+                            <input type="radio" name="interpretation_choice" value="1">
+                            <span id="choice1">First interpretation option</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="interpretation_choice" value="2">
+                            <span id="choice2">Second interpretation option</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="interpretation_choice" value="3">
+                            <span id="choice3">Third interpretation option</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="validation-section">
+                <h3>Sentiment Label:</h3>
+                <p class="label-hint">(Please select the overall tone of this meme)</p>
+                <div class="likert-scale">
+                    <div class="rating-options">
+                        <label><input type="radio" name="sentiment_label" value="positive">Positive</label>
+                        <label><input type="radio" name="sentiment_label" value="neutral">Neutral</label>
+                        <label><input type="radio" name="sentiment_label" value="negative">Negative</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="validation-section">
+                <h3>Emotion Labels:</h3>
+                <p class="label-hint">(Please select one or more emotion labels that best describe this meme)</p>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="emotion_labels" value="sarcastic">Sarcastic</label>
+                    <label><input type="checkbox" name="emotion_labels" value="humorous">Humorous</label>
+                    <label><input type="checkbox" name="emotion_labels" value="motivation">Motivation</label>
+                    <label><input type="checkbox" name="emotion_labels" value="offensive">Offensive</label>
+                </div>
+            </div>
+            
+            <button class="continue-button">Submit & Continue</button>
+        </div>
+    </div>
+
+    <script src="/js/cross-culture-validate-tutorial.js"></script>
+</body>
+</html> 

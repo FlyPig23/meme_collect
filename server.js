@@ -5,12 +5,14 @@ const path = require('path');
 const fs = require('fs');
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
-const csv = require('csv-parser');
+const csv = require('csv-parse');
 const validationTracker = require('./validationTracker');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const { EXPERIMENT_CONFIG } = require('./public/js/config.js');
 const validationDb = new sqlite3.Database('db/validation.db');
 const { v4: uuidv4 } = require('uuid');
+const { stringify } = require('csv-stringify');
+const { parse } = require('csv-parse/sync');
 require('dotenv').config();
 
 const app = express();
@@ -211,43 +213,90 @@ app.post('/demographics', async (req, res) => {
         // Reset validation counter for new user
         req.session.memesValidated = 0;
         
-        // Store Prolific ID in session
-        req.session.prolificId = req.body.prolific_id;
-        
-        // Store demographics in validation database
-        await new Promise((resolve, reject) => {
-            validationDb.run(`
-                INSERT INTO demographic_data (
-                    prolific_id, age, gender, education, 
-                    nationality, meme_familiarity, meme_usage
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                [
-                    req.body.prolific_id,
-                    req.body.age,
-                    req.body.gender,
-                    req.body.education,
-                    req.body.nationality,
-                    req.body.meme_familiarity,
-                    req.body.meme_usage
-                ],
-                function(err) {
-                    if (err) reject(err);
-                    else resolve();
-                }
-            );
-        });
-
-        // Store in session for other uses
-        req.session.demographicData = req.body;
-        
-        if (EXPERIMENT_CONFIG.STAGE === 1) {
-            res.redirect('/instructions');
+        if (EXPERIMENT_CONFIG.STAGE === 3) {
+            // Generate random user ID
+            const randomUserId = 'user_' + Math.random().toString(36).substr(2, 9);
+            req.session.userId = randomUserId;
+            
+            try {
+                // Store demographics in chnvalidation.db
+                await new Promise((resolve, reject) => {
+                    chnValidationDb.run(`
+                        INSERT INTO demographic_data (
+                            user_id, age, gender, education, 
+                            nationality, meme_familiarity, meme_usage
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                        [
+                            randomUserId,
+                            req.body.age,
+                            req.body.gender,
+                            req.body.education,
+                            req.body.nationality,
+                            req.body.meme_familiarity,
+                            req.body.meme_usage
+                        ],
+                        function(err) {
+                            if (err) reject(err);
+                            else resolve();
+                        }
+                    );
+                });
+                
+                // Store in session for other uses
+                req.session.demographicData = {
+                    ...req.body,
+                    user_id: randomUserId
+                };
+                
+                return res.redirect('/cross-culture-validate-tutorial');
+            } catch (dbError) {
+                console.error('Database error:', dbError);
+                return res.status(500).send('Error storing demographic data');
+            }
         } else {
-            res.redirect('/validate-tutorial');
+            // Original prolific ID logic for stages 1 and 2
+            req.session.prolificId = req.body.prolific_id;
+            
+            try {
+                await new Promise((resolve, reject) => {
+                    validationDb.run(`
+                        INSERT INTO demographic_data (
+                            prolific_id, age, gender, education, 
+                            nationality, meme_familiarity, meme_usage
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                        [
+                            req.body.prolific_id,
+                            req.body.age,
+                            req.body.gender,
+                            req.body.education,
+                            req.body.nationality,
+                            req.body.meme_familiarity,
+                            req.body.meme_usage
+                        ],
+                        function(err) {
+                            if (err) reject(err);
+                            else resolve();
+                        }
+                    );
+                });
+                
+                // Store in session for other uses
+                req.session.demographicData = req.body;
+                
+                // Route based on stage
+                if (EXPERIMENT_CONFIG.STAGE === 1) {
+                    return res.redirect('/instructions');
+                } else {
+                    return res.redirect('/validate-tutorial');
+                }
+            } catch (dbError) {
+                console.error('Database error:', dbError);
+                return res.status(500).send('Error storing demographic data');
+            }
         }
     } catch (error) {
         console.error('Error storing demographics:', error);
-        res.status(500).send('Error storing demographic data');
+        return res.status(500).send('Error storing demographic data');
     }
 });
 
@@ -362,27 +411,48 @@ async function initializeCountColumn() {
         });
 }
 
-// Store meme data in memory
+// Global variable to hold meme data
 let memeData = [];
 
-// Load meme data when server starts
-function loadMemeData() {
-    memeData = [];
-    fs.createReadStream('translated_data.csv')
-        .pipe(csv())
-        .on('data', (row) => {
-            const meme = {
-                ...row,
-                Image_ID: row['Image ID'] || row.Image_ID, // Handle both column name formats
-                Count: row.Count || '0'
-            };
-            memeData.push(meme);
-        })
-        .on('end', () => {
-            console.log('Meme data loaded successfully');
-            console.log(`Total memes in CSV: ${memeData.length}`);
+// Single function to handle everything
+function initializeMemeData() {
+    try {
+        // 1. Read and parse the CSV file
+        const fileContent = fs.readFileSync('final_mcq.csv', 'utf-8');
+        memeData = parse(fileContent, { 
+            columns: true, 
+            skip_empty_lines: true,
+            trim: true
         });
+
+        // 2. Check if Count column exists, if not add it
+        if (memeData.length > 0 && !memeData[0].hasOwnProperty('Count')) {
+            memeData = memeData.map(row => ({
+                ...row,
+                Count: '0'
+            }));
+
+            // Write back to CSV with Count column
+            const csvWriter = createCsvWriter({
+                path: 'final_mcq.csv',
+                header: Object.keys(memeData[0]).map(key => ({
+                    id: key,
+                    title: key
+                }))
+            });
+            
+            csvWriter.writeRecords(memeData);
+        }
+
+        console.log(`Loaded ${memeData.length} memes from final_mcq.csv`);
+    } catch (error) {
+        console.error('Error initializing meme data:', error);
+        memeData = [];
+    }
 }
+
+// Call once at startup
+initializeMemeData();
 
 // Function to check if image exists
 function imageExists(imagePath) {
@@ -591,7 +661,7 @@ app.post('/api/submitValidation', async (req, res) => {
 });
 
 // Load initial data
-loadMemeData();
+initializeMemeData();
 
 const memeUploadsPath = path.join(__dirname, 'public', 'images');
 console.log('Serving files from:', memeUploadsPath);
@@ -632,4 +702,183 @@ if (!fs.existsSync(uploadsDir)) {
 // Add this route
 app.get('/validate-tutorial', (req, res) => {
     res.render('validate-tutorial');
+});
+
+// Add new routes for stage 3
+app.get('/cross-culture-validate-tutorial', (req, res) => {
+    if (EXPERIMENT_CONFIG.STAGE !== 3) {
+        return res.redirect('/');
+    }
+    
+    // Check if user has completed demographics
+    if (!req.session.demographicData) {
+        return res.redirect('/demographics');
+    }
+
+    // Use sendFile instead of render since we're using static HTML
+    res.sendFile(path.join(__dirname, 'views', 'cross-culture-validate-tutorial.html'));
+});
+
+app.get('/cross-culture-validate', (req, res) => {
+    if (EXPERIMENT_CONFIG.STAGE !== 3) {
+        return res.redirect('/');
+    }
+
+    // Check if user has completed demographics
+    if (!req.session.demographicData) {
+        return res.redirect('/demographics');
+    }
+
+    // Check if user has completed the tutorial
+    if (!req.session.tutorialCompleted) {
+        return res.redirect('/cross-culture-validate-tutorial');
+    }
+
+    // Use sendFile instead of render since we're using static HTML
+    res.sendFile(path.join(__dirname, 'views', 'cross-culture-validate.html'));
+});
+
+// Add new route specifically for stage 3 cross-cultural validations
+app.post('/api/submitCrossCulturalValidation', async (req, res) => {
+    const userId = req.session.userId;
+    if (!userId) {
+        return res.status(400).json({ error: 'No user ID found' });
+    }
+
+    const { memeId, selectedInterpretation, sentimentLabel, emotionLabels } = req.body;
+
+    try {
+        // Insert validation into chnvalidation.db
+        await new Promise((resolve, reject) => {
+            chnValidationDb.run(`
+                INSERT INTO cross_cultural_validations (
+                    user_id, meme_id, selected_interpretation,
+                    sentiment_label, emotion_labels
+                ) VALUES (?, ?, ?, ?, ?)`,
+                [
+                    userId,
+                    memeId,
+                    selectedInterpretation,
+                    sentimentLabel,
+                    JSON.stringify(emotionLabels)
+                ],
+                function(err) {
+                    if (err) {
+                        console.error('Database error:', err);
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                }
+            );
+        });
+
+        // Update session counter
+        req.session.memesValidated = (req.session.memesValidated || 0) + 1;
+        
+        res.json({ 
+            success: true,
+            memesValidated: req.session.memesValidated,
+            completed: req.session.memesValidated >= EXPERIMENT_CONFIG.MEMES_PER_USER
+        });
+    } catch (error) {
+        console.error('Error submitting validation:', error);
+        res.status(500).json({ error: 'Failed to submit validation' });
+    }
+});
+
+// Add route for getting memes with MCQ data for stage 3
+app.get('/api/getMemes', (req, res) => {
+    if (req.query.stage === '3') {
+        // Filter memes with count < 2
+        const lowCountMemes = memeData.filter(meme => {
+            const count = parseInt(meme.Count, 10) || 0;
+            return count < 2;
+        });
+
+        // Select from low count memes if available, otherwise from all memes
+        const memePool = lowCountMemes.length > 0 ? lowCountMemes : memeData;
+        const selectedMeme = memePool[Math.floor(Math.random() * memePool.length)];
+
+        // Update count in memory
+        memeData = memeData.map(meme => {
+            if (meme.Image_ID === selectedMeme.Image_ID) {
+                return {
+                    ...meme,
+                    Count: (parseInt(meme.Count, 10) + 1).toString()
+                };
+            }
+            return meme;
+        });
+
+        // Write updated data back to CSV
+        if (memeData.length > 0) {
+            const columns = Object.keys(memeData[0]);
+            stringify(memeData, { header: true, columns: columns }, (err, output) => {
+                if (err) {
+                    console.error('Error writing to CSV:', err);
+                } else {
+                    fs.writeFileSync('final_mcq.csv', output);
+                }
+            });
+        }
+
+        // Return meme data along with validation progress
+        res.json({ 
+            meme: selectedMeme,
+            memesValidated: req.session.memesValidated || 0,
+            totalRequired: EXPERIMENT_CONFIG.MEMES_PER_USER
+        });
+    } else {
+        // Handle other stages...
+    }
+});
+
+// Add route to mark tutorial as completed
+app.post('/api/completeTutorial', (req, res) => {
+    if (EXPERIMENT_CONFIG.STAGE !== 3) {
+        return res.status(400).json({ error: 'Invalid stage' });
+    }
+    
+    req.session.tutorialCompleted = true;
+    res.json({ success: true });
+});
+
+// Database setup for stage 3
+const chnValidationDb = new sqlite3.Database('db/chnvalidation.db', (err) => {
+    if (err) {
+        console.error('Error opening database:', err);
+        return;
+    }
+    console.log('Connected to Chinese validation database');
+
+    // Create tables for stage 3
+    chnValidationDb.serialize(() => {
+        chnValidationDb.run(`
+            CREATE TABLE IF NOT EXISTS demographic_data (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id TEXT UNIQUE,
+                age TEXT,
+                gender TEXT,
+                education TEXT,
+                nationality TEXT,
+                meme_familiarity TEXT,
+                meme_usage TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        chnValidationDb.run(`
+            CREATE TABLE IF NOT EXISTS cross_cultural_validations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id TEXT,
+                meme_id TEXT,
+                selected_interpretation TEXT,
+                sentiment_label TEXT,
+                emotion_labels TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES demographic_data(user_id)
+            )
+        `);
+    });
 });

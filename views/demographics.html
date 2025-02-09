@@ -12,14 +12,16 @@
     </div>
 
     <div class="container">
-        <h1 data-translate="demographic_title">Demographic Information</h1>
+        <h1>Demographic Information <span class="chinese-text">人口统计信息</span></h1>
         <form action="/demographics" method="POST">
-            <label for="prolific_id" data-translate="prolific_id">Prolific ID:</label>
-            <input type="text" name="prolific_id" id="prolific_id" required placeholder="Enter your Prolific ID">
+            <div id="prolific-field" style="display: none;">
+                <label for="prolific_id">Prolific ID: <span class="chinese-text">Prolific ID：</span></label>
+                <input type="text" name="prolific_id" id="prolific_id" placeholder="Enter your Prolific ID">
+            </div>
 
-            <label for="age" data-translate="age_group">Age Group:</label>
+            <label for="age">Age Group: <span class="chinese-text">年龄组：</span></label>
             <select name="age" id="age" required>
-                <option value="">Select age group</option>
+                <option value="">Select age group <span class="chinese-text">选择年龄组</span></option>
                 <option value="18-24">18-24</option>
                 <option value="25-34">25-34</option>
                 <option value="35-44">35-44</option>
@@ -28,56 +30,56 @@
                 <option value="65+">65+</option>
             </select>
 
-            <label for="gender" data-translate="gender">Gender:</label>
+            <label for="gender">Gender: <span class="chinese-text">性别：</span></label>
             <select name="gender" id="gender" required>
-                <option value="">Select gender</option>
-                <option value="Male" data-translate="male">Male</option>
-                <option value="Female" data-translate="female">Female</option>
-                <option value="Other" data-translate="other">Other</option>
-                <option value="Prefer not to say" data-translate="prefer_not_say">Prefer not to say</option>
+                <option value="">Select gender <span class="chinese-text">选择性别</span></option>
+                <option value="Male">Male <span class="chinese-text">男</span></option>
+                <option value="Female">Female <span class="chinese-text">女</span></option>
+                <option value="Other">Other <span class="chinese-text">其他</span></option>
+                <option value="Prefer not to say">Prefer not to say <span class="chinese-text">不愿透露</span></option>
             </select>
 
-            <label for="education" data-translate="education">Educational Background:</label>
+            <label for="education">Educational Background: <span class="chinese-text">教育背景：</span></label>
             <select name="education" id="education" required>
-                <option value="">Select education level</option>
-                <option value="High School" data-translate="high_school">High School</option>
-                <option value="Some College" data-translate="some_college">Some College</option>
-                <option value="Bachelor's Degree" data-translate="bachelors">Bachelor's Degree</option>
-                <option value="Master's Degree" data-translate="masters">Master's Degree</option>
-                <option value="Doctoral Degree" data-translate="doctoral">Doctoral Degree</option>
-                <option value="Professional Degree" data-translate="professional">Professional Degree</option>
-                <option value="Other" data-translate="other">Other</option>
+                <option value="">Select education level <span class="chinese-text">选择教育水平</span></option>
+                <option value="High School">High School <span class="chinese-text">高中</span></option>
+                <option value="Some College">Some College <span class="chinese-text">大学肄业</span></option>
+                <option value="Bachelor's Degree">Bachelor's Degree <span class="chinese-text">学士学位</span></option>
+                <option value="Master's Degree">Master's Degree <span class="chinese-text">硕士学位</span></option>
+                <option value="Doctoral Degree">Doctoral Degree <span class="chinese-text">博士学位</span></option>
+                <option value="Professional Degree">Professional Degree <span class="chinese-text">专业学位</span></option>
+                <option value="Other">Other <span class="chinese-text">其他</span></option>
             </select>
 
-            <label for="nationality" data-translate="nationality">Nationality:</label>
+            <label for="nationality">Nationality: <span class="chinese-text">国籍：</span></label>
             <select name="nationality" id="nationality" required>
-                <option value="">Select nationality</option>
-                <option value="China" data-translate="china">China</option>
-                <option value="USA" data-translate="usa">USA</option>
-                <option value="Other" data-translate="other">Other</option>
+                <option value="">Select nationality <span class="chinese-text">选择国籍</span></option>
+                <option value="China">China <span class="chinese-text">中国</span></option>
+                <option value="USA">USA <span class="chinese-text">美国</span></option>
+                <option value="Other">Other <span class="chinese-text">其他</span></option>
             </select>
 
-            <label for="meme_familiarity" data-translate="meme_familiarity">How familiar are you with memes from your culture?</label>
+            <label for="meme_familiarity">How familiar are you with memes from your culture? <span class="chinese-text">您对您的文化中的网络表情包有多熟悉？</span></label>
             <select name="meme_familiarity" id="meme_familiarity" required>
-                <option value="">Select familiarity level</option>
-                <option value="Extremely Familiar" data-translate="extremely_familiar">Extremely familiar - I understand and can explain most cultural memes</option>
-                <option value="Very Familiar" data-translate="very_familiar">Very familiar - I understand most cultural memes</option>
-                <option value="Moderately Familiar" data-translate="moderately_familiar">Moderately familiar - I understand some cultural memes</option>
-                <option value="Slightly Familiar" data-translate="slightly_familiar">Slightly familiar - I understand few cultural memes</option>
-                <option value="Not at All Familiar" data-translate="not_familiar">Not at all familiar - I don't understand cultural memes</option>
+                <option value="">Select familiarity level <span class="chinese-text">选择熟悉程度</span></option>
+                <option value="Extremely Familiar">Extremely familiar - I understand and can explain most cultural memes <span class="chinese-text">非常熟悉 - 我能理解并解释大多数文化梗</span></option>
+                <option value="Very Familiar">Very familiar - I understand most cultural memes <span class="chinese-text">很熟悉 - 我能理解大多数文化梗</span></option>
+                <option value="Moderately Familiar">Moderately familiar - I understand some cultural memes <span class="chinese-text">比较熟悉 - 我能理解一些文化梗</span></option>
+                <option value="Slightly Familiar">Slightly familiar - I understand few cultural memes <span class="chinese-text">略微熟悉 - 我只能理解很少的文化梗</span></option>
+                <option value="Not at All Familiar">Not at all familiar - I don't understand cultural memes <span class="chinese-text">完全不熟悉 - 我不理解文化梗</span></option>
             </select>
 
-            <label for="meme_usage" data-translate="meme_usage">How often do you use memes in online conversations?</label>
+            <label for="meme_usage">How often do you use memes in online conversations? <span class="chinese-text">您在网络对话中使用表情包的频率如何？</span></label>
             <select name="meme_usage" id="meme_usage" required>
-                <option value="">Select frequency</option>
-                <option value="Daily" data-translate="daily">Daily</option>
-                <option value="Weekly" data-translate="weekly">Weekly</option>
-                <option value="Monthly" data-translate="monthly">Monthly</option>
-                <option value="Rarely" data-translate="rarely">Rarely</option>
-                <option value="Never" data-translate="never">Never</option>
+                <option value="">Select frequency <span class="chinese-text">选择频率</span></option>
+                <option value="Daily">Daily <span class="chinese-text">每天</span></option>
+                <option value="Weekly">Weekly <span class="chinese-text">每周</span></option>
+                <option value="Monthly">Monthly <span class="chinese-text">每月</span></option>
+                <option value="Rarely">Rarely <span class="chinese-text">很少</span></option>
+                <option value="Never">Never <span class="chinese-text">从不</span></option>
             </select>
 
-            <button type="submit" data-translate="continue">Next</button>
+            <button type="submit">Next <span class="chinese-text">下一步</span></button>
         </form>
     </div>
 
@@ -88,6 +90,20 @@
         const languageToggle = new LanguageToggle();
         const translator = new Translator();
         translator.loadTranslations();
+
+        // Show/hide Prolific ID field based on experiment stage
+        document.addEventListener('DOMContentLoaded', () => {
+            const prolificField = document.getElementById('prolific-field');
+            const prolificInput = document.getElementById('prolific_id');
+            
+            if (EXPERIMENT_CONFIG.STAGE === 3) {
+                prolificField.style.display = 'none';
+                prolificInput.removeAttribute('required');
+            } else {
+                prolificField.style.display = 'block';
+                prolificInput.setAttribute('required', 'required');
+            }
+        });
     </script>
 </body>
 </html>

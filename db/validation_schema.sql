@@ -1,5 +1,7 @@
 CREATE TABLE IF NOT EXISTS demographic_data (
-    prolific_id TEXT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT UNIQUE,
+    prolific_id TEXT UNIQUE,
     age TEXT,
     gender TEXT,
     education TEXT,
@@ -21,4 +23,16 @@ CREATE TABLE IF NOT EXISTS meme_validations (
     feedback TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (prolific_id) REFERENCES demographic_data(prolific_id)
+);
+
+CREATE TABLE IF NOT EXISTS cross_cultural_validations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT,
+    meme_id TEXT,
+    selected_interpretation TEXT,
+    correct_interpretation TEXT,
+    sentiment_label TEXT,
+    emotion_labels TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES demographic_data(user_id)
 ); 

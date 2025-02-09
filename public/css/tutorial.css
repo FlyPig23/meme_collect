@@ -127,4 +127,161 @@
     transform: translateX(-50%);
 }
 
-/* Add JavaScript to dynamically position and resize the box */ 
+/* Add JavaScript to dynamically position and resize the box */
+
+.choice-options {
+    width: 100%;
+    padding: 10px;
+}
+
+.choice-options label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.choice-options input[type="radio"] {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.choice-options span {
+    margin-left: 10px;
+    line-height: 1.4;
+    flex-grow: 1;
+    text-align: left;
+}
+
+.validation-section {
+    background: #f9f9f9;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-size: 1.1em;
+}
+
+.validation-section h3 {
+    color: #333;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+    font-size: 1.3em;
+}
+
+.multiple-choice {
+    background: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.choice-options label {
+    display: block;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border: 1px solid #e1e8ef;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.choice-options label:hover {
+    background: #f0f4f8;
+    border-color: #d0d9e3;
+}
+
+.choice-options input[type="radio"] {
+    margin-right: 12px;
+}
+
+.rating-options {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+
+.rating-options label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    border: 1px solid #e1e8ef;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.rating-options label:hover {
+    background: #f0f4f8;
+}
+
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 10px 0;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    border: 1px solid #e1e8ef;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.checkbox-group label:hover {
+    background: #f0f4f8;
+}
+
+.instruction-text {
+    color: #5d6778;
+    margin-bottom: 15px;
+    font-size: 1em;
+}
+
+.label-hint {
+    color: #666;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.continue-button {
+    background: #2563eb;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.continue-button:hover {
+    background: #1d4ed8;
+}
+
+/* Selected state styling */
+input[type="radio"]:checked + span,
+input[type="checkbox"]:checked + span {
+    color: #2563eb;
+    font-weight: 500;
+}
+
+.choice-options label:has(input:checked),
+.rating-options label:has(input:checked),
+.checkbox-group label:has(input:checked) {
+    background: #eef2ff;
+    border-color: #2563eb;
+} 

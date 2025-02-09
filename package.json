@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "connect-sqlite3": "^0.9.15",
+    "csv-parse": "^5.6.0",
     "csv-parser": "^3.2.0",
+    "csv-stringify": "^6.5.2",
     "csv-writer": "^1.6.0",
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",

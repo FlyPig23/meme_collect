@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cross-Cultural Meme Understanding</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>    
+    <div class="language-toggle">
+        <button onclick="languageToggle.toggle()" id="langToggle">中文</button>
+    </div>
+
+    <div class="progress-counter">
+        <span id="progressCount" data-translate="progress_count">0/20</span>
+    </div>
+    
+    <div class="container">
+        <h1 data-translate="validate_title">Cross-Cultural Meme Understanding</h1>
+        
+        <div class="validation-box">
+            <img id="memeImage" src="" alt="Meme to validate" class="meme-image">
+            
+            <!-- Interpretation Section -->
+            <div class="validation-section">
+                <h3>What does this meme mean? <span class="chinese-text">这个表情包是什么意思？</span></h3>
+                <p class="instruction-text">Please select the correct interpretation of this meme:
+                    <span class="chinese-text">请选择这个表情包最恰当的解释：</span>
+                </p>
+                <div class="multiple-choice">
+                    <div class="choice-options">
+                        <label>
+                            <input type="radio" name="interpretation_choice" value="1">
+                            <span id="choice1">First interpretation option</span>
+                            <span id="choice1_cn" class="chinese-text"></span>
+                        </label>
+                        <label>
+                            <input type="radio" name="interpretation_choice" value="2">
+                            <span id="choice2">Second interpretation option</span>
+                            <span id="choice2_cn" class="chinese-text"></span>
+                        </label>
+                        <label>
+                            <input type="radio" name="interpretation_choice" value="3">
+                            <span id="choice3">Third interpretation option</span>
+                            <span id="choice3_cn" class="chinese-text"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sentiment Section -->
+            <div class="validation-section">
+                <h3>Sentiment Label <span class="chinese-text">情感标签</span></h3>
+                <p class="instruction-text">Choose one sentiment that best describes the meme's overall tone:
+                    <span class="chinese-text">选择一个最能描述这个表情包整体语气的情感标签：</span>
+                </p>
+                <div class="sentiment-options">
+                    <label>
+                        <input type="radio" name="sentiment" value="positive">
+                        <span>Positive</span>
+                        <span class="chinese-text">积极的</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="sentiment" value="neutral">
+                        <span>Neutral</span>
+                        <span class="chinese-text">中性的</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="sentiment" value="negative">
+                        <span>Negative</span>
+                        <span class="chinese-text">消极的</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Emotion Section -->
+            <div class="validation-section">
+                <h3>Emotion Labels <span class="chinese-text">情绪标签</span></h3>
+                <p class="instruction-text">Select one or more emotions that the meme expresses:
+                    <span class="chinese-text">选择一个或多个这个表情包所表达的情绪：</span>
+                </p>
+                <div class="emotion-options">
+                    <label>
+                        <input type="checkbox" name="emotions" value="sarcastic">
+                        <span>Sarcastic</span>
+                        <span class="chinese-text">讽刺的</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="emotions" value="humorous">
+                        <span>Humorous</span>
+                        <span class="chinese-text">幽默的</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="emotions" value="motivation">
+                        <span>Motivation</span>
+                        <span class="chinese-text">激励的</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="emotions" value="offensive">
+                        <span>Offensive</span>
+                        <span class="chinese-text">冒犯的</span>
+                    </label>
+                </div>
+            </div>
+            
+            <button onclick="submitValidation()" class="continue-button">Submit & Continue
+                <span class="chinese-text">提交并继续</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="/js/config.js"></script>
+    <script src="/js/utils/translator.js"></script>
+    <script src="/js/components/languageToggle.js"></script>
+    <script src="/js/cross-culture-validate.js"></script>
+</body>
+</html> 

@@ -1,5 +1,5 @@
 const EXPERIMENT_CONFIG = {
-  STAGE: 2, // Change between 1 and 2 to switch experiment stages
+  STAGE: 3, // Updated to stage 3
   SUPPORTED_LANGUAGES: ['en', 'zh'],
   DEFAULT_LANGUAGE: 'en',
   MEMES_PER_USER: 20, // Number of memes each user needs to validate
@@ -13,6 +13,11 @@ const EXPERIMENT_CONFIG = {
       TRANSLATE: '/api/translate',
       GET_MEMES: '/api/getMemes?stage=2',
       SUBMIT_VALIDATION: '/api/submitValidation?stage=2'
+    },
+    STAGE3: {
+      TRANSLATE: '/api/translate',
+      GET_MEMES: '/api/getMemes?stage=3',
+      SUBMIT_VALIDATION: '/api/submitValidation?stage=3'
     }
   }
 };
